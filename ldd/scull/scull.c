@@ -40,7 +40,7 @@ static int scull_setup_cdev(struct scull_dev *_dev, int _index);
 static int scull_trim(struct scull_dev *_dev);
 static struct scull_qset* scull_follow(struct scull_dev *_dev, int _item);
 
-/* The seq_file interfaces */
+/* seq_file interfaces */
 static void *scull_seq_start(struct seq_file *_s, loff_t *_pos);
 static void *scull_seq_next(struct seq_file *_s, void *_v, loff_t *_pos);
 static void scull_seq_stop(struct seq_file *_s, void *_v);
@@ -104,7 +104,7 @@ static int __init scull_init(void)
 
     if (0 != ret)
     {
-        printk(KERN_ERR "scull_init: can't get major %d, result is %d!\n", g_scull_major, ret);
+        printk(KERN_ERR "scull_init: can't get major %d(%d!)\n", g_scull_major, ret);
         return ret;
     }
 
@@ -197,7 +197,7 @@ static ssize_t scull_read(struct file *_filp, char __user *_buf, size_t _count, 
     struct scull_dev *dev = _filp->private_data;
     struct scull_qset *dptr = NULL;
     int quantum = dev->quantum_, qset = dev->qset_;
-    int itemsize = quantum * qset; /* byte size of the link table item */
+    int itemsize = quantum * qset; /* the byte size of the link table item */
     int item = 0, s_pos = 0, q_pos = 0, rest = 0;
     ssize_t ret = 0;
 
@@ -232,7 +232,7 @@ static ssize_t scull_read(struct file *_filp, char __user *_buf, size_t _count, 
         goto out;
     }
 
-    /* read the data from the quantum until the end */
+    /* read data from the quantum until the end */
     if (_count > quantum - q_pos)
     {
        _count = quantum - q_pos;
@@ -307,7 +307,7 @@ static ssize_t scull_write(struct file *_filp, const char __user *_buf, size_t _
         }        
     }
 
-    /* write the data to the quantum until the end */
+    /* write data to the quantum until the end */
     if (_count > quantum - q_pos)
     {
        _count = quantum - q_pos;
@@ -322,7 +322,7 @@ static ssize_t scull_write(struct file *_filp, const char __user *_buf, size_t _
     *_fpos += _count;
     ret = _count;
 
-    /* update file size */
+    /* update the file size */
     if (dev->size_  < *_fpos)
     {
         dev->size_ = *_fpos;
@@ -517,7 +517,7 @@ static int scull_setup_cdev(struct scull_dev *_dev, int _index)
 
     if (NULL == _dev)
     {
-        printk(KERN_ERR "scull_setup_cdev: Device(%d) is null!\n", _index);
+        printk(KERN_ERR "scull_setup_cdev: Device %d is null!\n", _index);
         return -1;
     }
 
@@ -530,7 +530,7 @@ static int scull_setup_cdev(struct scull_dev *_dev, int _index)
     /* fail gracefully if need be */
     if (0 != ret)
     {
-        printk(KERN_ERR "scull_setup_cdev: Error %d adding scull!\n", ret);
+        printk(KERN_ERR "scull_setup_cdev: error %d adding scull!\n", ret);
         return ret;
     }
 
