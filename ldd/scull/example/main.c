@@ -9,7 +9,7 @@
 
 #define DEV "/dev/scull0"
  
-int main()
+int main(int argc, char *argv[])
 {
 	int fd = open("/dev/scull0", O_RDWR);
 	int cmd = 0, quantum = 0;

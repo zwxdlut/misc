@@ -39,7 +39,7 @@ static void can_receive_thread(int32_t _canfd);
 static void uart_receive_thread(int32_t _uartfd);
 /** @} */ // Threads
 
-static void print_buf(const char *_prefix, const uint32_t _id, const uint8_t _buf[], const uint16_t _size);
+void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, const size_t _size);
 
 /*******************************************************************************
  * Functions
@@ -104,7 +104,7 @@ void can_receive_thread(int32_t _canfd)
 			continue;
 		}
 
-		print_buf("CAN-RX: ", frame.can_id, frame.data, frame.can_dlc);
+		print_buffer("CAN-RX: ", frame.can_id, frame.data, frame.can_dlc);
 		size = write(_canfd, &frame, sizeof(frame));
 
 		if (size != sizeof(frame))
@@ -155,7 +155,7 @@ void uart_receive_thread(int32_t _uartfd)
 			continue;
 		}
 
-		print_buf("UART-RX: ", _uartfd, buf, size);
+		print_buffer("UART-RX: ", _uartfd, buf, size);
 		ssize_t nbytes = write(_uartfd, buf, size);
 
 		if (nbytes != size)
@@ -165,21 +165,29 @@ void uart_receive_thread(int32_t _uartfd)
 	}
 }
 
-void print_buf(const char *_prefix, const uint32_t _id, const uint8_t _buf[], const uint16_t _size)
+void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, const size_t _size)
 {
 #if defined _UDEBUG
-	char info[1000] = "";
-	char s[10] = "";
-
-	sprintf(info, "%s(0x%X,%d): ", _prefix, (unsigned int)_id, _size);
-
-	for (uint16_t i = 0; i < _size; i++)
+	if (nullptr == _buf)
 	{
-		sprintf(s, "%02X ", _buf[i]);
-		strcat(info, s);
+		printf("Buffer is null!\n");
 	}
 
-	strcat(info, "\n");
-	printf("%s", info);
+	char *str = (char *)malloc(4 * _size + strlen(_prefix) + 32);
+	uint8_t *buf = (uint8_t*)_buf;
+
+	sprintf(str, "%s(0x%X,%ld): ", _prefix, _id, _size);
+
+	for (size_t i = 0; i < _size; i++)
+	{
+		char s[10] = "";
+
+		sprintf(s, "%02X ", buf[i]);
+		strcat(str, s);
+	}
+
+	strcat(str, "\n");
+	printf("%s", str);
+	free(str);
 #endif
 }
