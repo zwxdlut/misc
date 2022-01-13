@@ -1,7 +1,5 @@
-#pragma once
-
-#ifndef __CAN_H__
-#define __CAN_H__
+#ifndef __DEVICE_H__
+#define __DEVICE_H__
 
 #include <stdint.h>
 
@@ -47,4 +45,4 @@ int32_t uart_init(const char _name[], const uint32_t _baudrate, const uint8_t _d
 }
 #endif
 
-#endif // __CAN_H__
+#endif /* __DEVICE_H__ */

@@ -173,7 +173,7 @@ void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, co
 		printf("Buffer is null!\n");
 	}
 
-	char *str = (char *)malloc(4 * _size + strlen(_prefix) + 32);
+	char *str = (char*)malloc(4 * _size + strlen(_prefix) + 32);
 	uint8_t *buf = (uint8_t*)_buf;
 
 	sprintf(str, "%s(0x%X,%ld): ", _prefix, _id, _size);
