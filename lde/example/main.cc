@@ -22,28 +22,19 @@
 
 #include "device.h"
 
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
 #define CAN_DEV_NAME  "can0"
 #define UART_DEV_NAME "/dev/ttyS7"
 
-/*******************************************************************************
- * Local function prototypes
- ******************************************************************************/
 /** 
  * @name Threads
  * @{
  */
-static void can_receive_thread(int32_t _canfd);
-static void uart_receive_thread(int32_t _uartfd);
+void can_receive_thread(int32_t _canfd);
+void uart_receive_thread(int32_t _uartfd);
 /** @} */ // Threads
 
 void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, const size_t _size);
 
-/*******************************************************************************
- * Functions
- ******************************************************************************/
 int main(int argc, char *argv[])
 {
 	auto now = std::chrono::system_clock::now();
@@ -76,9 +67,6 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-/*******************************************************************************
- * Local functions
- ******************************************************************************/
 void can_receive_thread(int32_t _canfd)
 {
 	if (-1 == _canfd)
