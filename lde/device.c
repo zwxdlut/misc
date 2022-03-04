@@ -79,7 +79,7 @@
 /*******************************************************************************
  * Functions
  ******************************************************************************/
-int32_t can_init(const char _name[], const uint32_t _filter[], const uint8_t _count)
+int32_t can_init(const char _name[], const uint32_t _filter_ids[], const size_t _filter_count)
 {
 	printf("can_init: %s\n", _name);
 		
@@ -114,15 +114,15 @@ int32_t can_init(const char _name[], const uint32_t _filter[], const uint8_t _co
 		return -1;
 	}
 
-	if (NULL != _filter && 0 != _count)
+	if (NULL != _filter_ids && 0 != _filter_count)
 	{
-		size_t size = sizeof(struct can_filter) * _count;
+		size_t size = sizeof(struct can_filter) * _filter_count;
 
 		rfilter = malloc(size);
 
-		for (uint8_t i = 0; i < _count; i++)
+		for (size_t i = 0; i < _filter_count; i++)
 		{
-			rfilter[i].can_id = _filter[i];
+			rfilter[i].can_id = _filter_ids[i];
 			rfilter[i].can_mask = CAN_SFF_MASK; /* #define CAN_SFF_MASK 0x000007FFU */
 		}
 

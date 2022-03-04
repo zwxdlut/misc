@@ -19,10 +19,10 @@ extern "C" {
  *
  * @param [in] _name the CAN device name
  * @param [in] _filter the CAN filter ids
- * @param [in] _count the CAN filter ids count
+ * @param [in] _count the CAN filter id count
  * @return the CAN file destriptor or -1(error)
  */
-int32_t can_init(const char _name[], const uint32_t _filter[], const uint8_t _count);
+int32_t can_init(const char _name[], const uint32_t _filter_ids[], const size_t _filter_count);
 
 /**
  * Open and initialize a UART device.
