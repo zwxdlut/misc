@@ -22,7 +22,7 @@ namespace sock
         lost = 2,
     };
 
-    typedef void (*connect_state_callback_t)(const connect_state _state, void *_param);
+    typedef void (*connect_state_callback)(const connect_state _state, void *_param);
     
     /**
      * Socket client.
@@ -32,7 +32,7 @@ namespace sock
     public:
         ~client();
 
-        void set_connect_state_callback(connect_state_callback_t _callback, void *_param);
+        void set_connect_state_callback(connect_state_callback _callback, void *_param);
 
         int32_t open(const char _addr[], const uint32_t _port, const bool _block = true);
 
@@ -52,7 +52,7 @@ namespace sock
         // bool done_ = true;
         // std::thread thread_;
         timer_t timer_;
-        connect_state_callback_t callback_ = nullptr;
+        connect_state_callback callback_ = nullptr;
         void *param_ = nullptr;
     };
 }

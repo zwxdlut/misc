@@ -16,7 +16,7 @@ timer::~timer()
     stop();
 }
 
-int32_t timer::start(const uint32_t _period, handler_t _handler, void *_param)
+int32_t timer::start(const uint32_t _period, handler _handler, void *_param)
 {
     handler_ = _handler;
     param_ = _param;

@@ -25,7 +25,7 @@ namespace sock
         close();
     }
 
-    void client::set_connect_state_callback(connect_state_callback_t _callback, void *_param)
+    void client::set_connect_state_callback(connect_state_callback _callback, void *_param)
     {
         callback_ = _callback;
         param_ = _param;

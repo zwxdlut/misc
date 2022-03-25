@@ -156,26 +156,25 @@ void uart_receive_thread(int32_t _uartfd)
 void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, const size_t _size)
 {
 #if defined _UDEBUG
-	if (nullptr == _buf)
-	{
-		printf("Buffer is null!\n");
-	}
+if (NULL == _buf)
+    {
+        printf("%s: Buffer is null!\n", _prefix);
+    }
 
-	char *str = (char*)malloc(4 * _size + strlen(_prefix) + 32);
-	uint8_t *buf = (uint8_t*)_buf;
+    char str[4 * _size + strlen(_prefix) + 100];
+    uint8_t *buf = (uint8_t*)_buf;
+    
+    sprintf(str, "%s(0x%X,%ld): ", _prefix, _id, _size);
 
-	sprintf(str, "%s(0x%X,%ld): ", _prefix, _id, _size);
+    for (size_t i = 0; i < _size; i++)
+    {
+        char s[10] = "";
 
-	for (size_t i = 0; i < _size; i++)
-	{
-		char s[10] = "";
+        sprintf(s, "%02X ", buf[i]);
+        strcat(str, s);
+    }
 
-		sprintf(s, "%02X ", buf[i]);
-		strcat(str, s);
-	}
-
-	strcat(str, "\n");
+    strcat(str, "\n");
 	printf("%s", str);
-	free(str);
 #endif
 }
