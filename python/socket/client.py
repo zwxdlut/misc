@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-"""python-socket客户端"""
+"""Python-Socket client"""
 
 print("\n############################## %s ##################################\n" %(__doc__))
 

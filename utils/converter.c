@@ -23,6 +23,7 @@
  ******************************************************************************/
 void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, const size_t _size)
 {
+#if defined _UDEBUG
     if (NULL == _buf)
     {
         LOGE("BUFFER", "%s: Buffer is null!\n", _prefix);
@@ -44,6 +45,7 @@ void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, co
     strcat(str, "\n");
 
     LOGD("BUFFER", "%s", str);
+#endif
 }
 
 void bytes_to_string(const void *_bytes, const size_t _size, char _str[])

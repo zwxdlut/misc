@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-"""python-数据库"""
+"""Python-Database"""
 
 print("\n############################## %s ##################################\n" %(__doc__))
 
 import mysql.connector
 
-#创建数据库连接
+# create database connection
 db = mysql.connector.connect(
     host = "localhost",
     user = "root",
@@ -16,7 +16,7 @@ db = mysql.connector.connect(
 
 cursor = db.cursor()
 
-#创建数据库
+# create database
 cursor.execute("DROP DATABASE IF EXISTS runoob_db")
 
 cursor.execute("CREATE DATABASE runoob_db")
@@ -32,7 +32,7 @@ for c in cursor:
 
 print()
 
-#连接数据库
+# connnect database
 db = mysql.connector.connect(
     host = "localhost",
     user = "root",
@@ -42,7 +42,7 @@ db = mysql.connector.connect(
 
 cursor = db.cursor()
 
-#创建表
+# create table
 cursor.execute("DROP TABLE IF EXISTS employee")
 
 cursor.execute(
@@ -65,7 +65,7 @@ for c in cursor:
     
 print()
 
-#插入
+# insert
 try:
     # cursor.execute(
     #     """INSERT INTO employee(first_name,
@@ -90,7 +90,7 @@ try:
 except:
     db.rollback()
 
-#查询
+# query
 try:
     sql = "SELECT * FROM employee"
 
@@ -107,7 +107,7 @@ try:
 except:
     print("Error: unable to fecth data")
 
-#删除
+# delete
 try:
     # cursor.execute("DELETE FROM employee WHERE age > %s", (20,))
 
@@ -121,7 +121,7 @@ try:
 except:
     db.rollback()
 
-#更新
+# update
 try:
     # cursor.execute("UPDATE employee SET age = age + 1 WHERE sex = %s", ('M', ))
 

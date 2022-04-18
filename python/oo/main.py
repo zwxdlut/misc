@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-"""python-面向对象"""
+"""Python-Object-oriented"""
 
 print("\n############################## %s ##################################\n" %(__doc__))
 
 class Base:
-    "基类"
+    "Base class"
 
     def __init__(self, attr):
+        print("%s.__init__: attr = %d" %(Base.__name__, attr))
         self.attr = attr
-        print("%s.__init__: attr = %d" %(Base.__name__, self.attr))
-
+       
     def __del__(self):
         print("%s.__del__" %(Base.__name__))
 
@@ -40,7 +40,7 @@ class Base:
         return self.attr
 
 class Derive(Base):
-    "子类"
+    "Derive class"
 
     def __init__(self, attr):
         #super(Derive, self).__init__(attr)
@@ -48,9 +48,9 @@ class Derive(Base):
         print("%s.__init__: attr = %d" %(Derive.__name__, self.attr))
 
     def __del__(self):
-        Base.__del__(self)
         print("%s.__del__" %(Derive.__name__))
-
+        Base.__del__(self)
+        
     def __add__(self, obj):
         return Derive(self.attr + obj.attr) 
 
@@ -80,17 +80,17 @@ print(b2)
 
 print()
 
-print("repr(b1): %s" %(repr(b1)))
-print("repr(b2): %s" %(repr(b2)))
-print("b1 == b2: %s" %(b1 == b2))
-print("b1 > b2: %s" %(b1 > b2))
-print("b1 + b2: %s" %(b1 + b2))
+print("repr(b1):", repr(b1))
+print("repr(b2):", repr(b2))
+print("b1 == b2:", (b1 == b2))
+print("b1 > b2:", (b1 > b2))
+print("b1 + b2:", (b1 + b2))
 
 print()
 
-print("isinstance(b1, Base) = %s" %(isinstance(b1, Base)))
-print("isinstance(b1, Derive) = %s" %(isinstance(b1, Derive)))
-print("issubclass(Derive, Base) = %s" %(issubclass(Derive, Base)))
+print("isinstance(b1, Base):", isinstance(b1, Base))
+print("isinstance(b1, Derive):", isinstance(b1, Derive))
+print("issubclass(Derive, Base):", issubclass(Derive, Base))
 
 print()
 

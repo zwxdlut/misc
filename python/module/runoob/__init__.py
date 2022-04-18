@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 if __name__ == '__main__':
-    print('作为主程序运行')
+    print('Main process')
 else:
-    print('初始化 runoob包')
+    print('Initialize the runoob package.')
     print("__path__:", __path__)
