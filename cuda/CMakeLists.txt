@@ -15,13 +15,13 @@ message(STATUS "CUDA toolkit dir: ${}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11")
 set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -std=c++11; -g;
-    -gencode arch=compute_60,code=sm_60;
-    -gencode arch=compute_61,code=sm_61;
-    -gencode arch=compute_70,code=sm_70;
-    -gencode arch=compute_72,code=sm_72;
-    -gencode arch=compute_75,code=sm_75;
-    -gencode arch=compute_80,code=sm_80;
-    -gencode arch=compute_86,code=sm_86;)
+    -gencode arch=compute_60,code=sm_60
+    -gencode arch=compute_61,code=sm_61
+    -gencode arch=compute_70,code=sm_70
+    -gencode arch=compute_72,code=sm_72
+    -gencode arch=compute_75,code=sm_75
+    -gencode arch=compute_80,code=sm_80
+    -gencode arch=compute_86,code=sm_86)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
