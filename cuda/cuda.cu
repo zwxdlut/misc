@@ -153,7 +153,7 @@ void gpu_prop()
     std::cout << "每个SM的最大线程束数: " << prop.maxThreadsPerMultiProcessor / 32 << std::endl;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     gpu_prop();
     vector_add();

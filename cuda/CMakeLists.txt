@@ -27,6 +27,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 link_directories(/usr/lib /usr/local/lib)
 
-cuda_add_executable(${PROJECT_NAME} main.cu)
+cuda_add_executable(${PROJECT_NAME} cuda.cu)
 
 target_link_libraries(${PROJECT_NAME} ${CUDA_LIBRARIES})
