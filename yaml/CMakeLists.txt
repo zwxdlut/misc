@@ -8,9 +8,9 @@ add_definitions(-D _UDEBUG)
 
 include_directories(. include)
 
-link_directories(${CMAKE_HOME_DIRECTORY})
-
 aux_source_directory(. SRCS)
+
+link_directories(${CMAKE_HOME_DIRECTORY})
 
 add_executable(${PROJECT_NAME} ${SRCS})
 
