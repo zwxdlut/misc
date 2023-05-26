@@ -1,0 +1,30 @@
+
+image_dir: /mnt/ext/data/traffic_all/seg/masks/val
+output_dir: ./output
+
+width: 3840
+height: 2160
+channel: 1
+resize: null
+# resize: [150, 250]
+
+# vanish_line: 1120 # 消失线
+# ipm_width_x_3d: 30 # IPM中真实距离x方向[-15, +15], 单位：m
+# ipm_height_y_3d: 8 # IPM中真实距离y方向[-4, +4], 单位：m
+# ipm_step_xy: 0.01 # 像素点真实距离，单位: m
+# ipm_height_y_start: 3.0 # 单位: m
+
+vanish_line: 1120 # 消失线
+ipm_width_x_3d: 20 # IPM中真实距离x方向[-15, +15], 单位：m
+ipm_height_y_3d: 20 # IPM中真实距离y方向[-4, +4], 单位：m
+ipm_step_xy: 0.05 # 像素点真实距离，单位: m
+ipm_height_y_start: 8.0 # 单位: m
+
+# 相机内参 fx fy cx cy
+intrinsic: [2141.9937, 2144.1709, 1724.7345, 1106.3953]
+
+# 相机外参
+R_ccs2ocs: [0.999616, -0.00817016, 0.0264734,
+            0.0263923, -0.00988875, -0.999603,
+            0.0084287, 0.999918, -0.00966933]
+T_ccs2ocs: [-0.498692, 1.619, 2.51533]
