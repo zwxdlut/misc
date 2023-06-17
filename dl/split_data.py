@@ -65,7 +65,7 @@ for root, dirs, files in os.walk(images_path, topdown=True):
 
         image_path = os.path.join(images_path, name + ".jpg")
         label_path = os.path.join(labels_path, name + ".txt")
-        mask_path = os.path.join(masks_path, name + ".jpg")
+        mask_path = os.path.join(masks_path, name + ".png")
 
         if not os.path.exists(image_path) \
             or not os.path.exists(label_path) \
@@ -81,7 +81,7 @@ for root, dirs, files in os.walk(images_path, topdown=True):
             print(f"copy {label_path} to {labels_train_path}")
             shutil.copy(label_path, labels_train_path)
 
-            # dst_path = os.path.join(masks_train_path, name + ".jpg")
+            # dst_path = os.path.join(masks_train_path, name + ".png")
             print(f"copy {mask_path} to {masks_train_path}")
             shutil.copy(mask_path, masks_train_path)
         else:
@@ -93,6 +93,6 @@ for root, dirs, files in os.walk(images_path, topdown=True):
             print(f"copy {label_path} to {labels_val_path}")
             shutil.copy(label_path, labels_val_path)
 
-            # dst_path = os.path.join(masks_val_path, name + ".jpg")
+            # dst_path = os.path.join(masks_val_path, name + ".png")
             print(f"copy {mask_path} to {masks_val_path}")
             shutil.copy(mask_path, masks_val_path)

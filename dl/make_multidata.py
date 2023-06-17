@@ -74,7 +74,7 @@ for type in types:
 
             image_path = os.path.join(images_path2, name + ".jpg")
             label_path = os.path.join(labels_path1, name + ".txt")
-            mask_path = os.path.join(masks_path2, name + ".jpg")
+            mask_path = os.path.join(masks_path2, name + ".png")
 
             if not os.path.exists(image_path) \
                 or not os.path.exists(label_path) \
@@ -89,7 +89,7 @@ for type in types:
             print(f"copy {label_path} to {dst_path}")
             shutil.copyfile(label_path, dst_path)
 
-            dst_path = os.path.join(dst_masks_path, name + ".jpg")
+            dst_path = os.path.join(dst_masks_path, name + ".png")
             print(f"copy {mask_path} to {dst_path}")
             shutil.copyfile(mask_path, dst_path)
 
@@ -119,10 +119,10 @@ for type in types:
 # masks = sorted(os.listdir("all-traffic/masks/val"))
 
 # for name in sorted(os.listdir("all-traffic/images/val")):
-#     name = name.replace(".jpg", ".jpg")
+#     name = name.replace(".jpg", ".png")
 #     if name not in masks:
 #         path = os.path.join("temp", name)
-#         img = cv2.imread(os.path.join("all-traffic/images/val", name.replace(".jpg", ".jpg")))
+#         img = cv2.imread(os.path.join("all-traffic/images/val", name.replace(".png", ".jpg")))
 #         mask = np.zeros((img.shape[0], img.shape[1]), dtype=np.uint8)
 #         cv2.imwrite(path, mask)
 #         print(f"write {path}")
