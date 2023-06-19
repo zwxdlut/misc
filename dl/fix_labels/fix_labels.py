@@ -2,10 +2,6 @@ import os
 from shutil import copyfile
 
 import cv2
-from numpy import imag
-from numba import jit
-import random
-import torch
 
 """
 Fuse labes of masks.
