@@ -18,11 +18,12 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 
-#define SRC_PATH "/mnt/ext/data/traffic_all/seg/ipm/masks/train/"
-#define DST_PATH "/mnt/ext/data/traffic_all/seg/ipm/masks_ll/train/"
-#define LL_LABEL_VALUE 1
+#define SRC_PATH "/mnt/ext/data/traffic/seg/masks/train/"
+#define DST_PATH "/mnt/ext/data/traffic/seg/masks/train_out/"
 
-const std::vector<uint8_t> FUSE_LABLES = {2, 3, 4, 5, 7, 10, 21};
+#define FIXED_LABEL 1
+
+const std::vector<uint8_t> LABEL_FILTER = {2, 3, 4, 5, 7, 10, 21};
 
 int main(int argc, char *argv[])
 {   
@@ -81,9 +82,9 @@ int main(int argc, char *argv[])
 
         for (size_t k = 0, HW = img.rows * img.cols; k < HW; k++)
         {
-            if (FUSE_LABLES.end() != std::find(FUSE_LABLES.begin(), FUSE_LABLES.end(), img_ori.ptr<uint8_t>()[k]))
+            if (LABEL_FILTER.end() != std::find(LABEL_FILTER.begin(), LABEL_FILTER.end(), img_ori.ptr<uint8_t>()[k]))
             {
-                img.ptr<uint8_t>()[k] = LL_LABEL_VALUE;
+                img.ptr<uint8_t>()[k] = FIXED_LABEL;
             }
         }
 
