@@ -7,20 +7,20 @@ import cv2
 Fuse labes of masks.
 """
 
-src_path = "/mnt/ext/data/traffic/seg/masks/train"
-if not os.path.exists(src_path):
-    print(f"{src_path} is not exist, please check!")
+SRC_PATH = "/mnt/ext/data/traffic/seg/masks/train"
+if not os.path.exists(SRC_PATH):
+    print(f"{SRC_PATH} is not exist, please check!")
     exit(0)
 
-dst_path = "/mnt/ext/data/traffic/seg/masks/train_out"
-if not os.path.exists(dst_path):
-    os.makedirs(dst_path)
+DST_PATH = "/mnt/ext/data/traffic/seg/masks/train_out"
+if not os.path.exists(DST_PATH):
+    os.makedirs(DST_PATH)
 
 LABEL_FILTER = [2, 3, 4, 5, 7, 10, 21]
 FIXED_LABEL = 125
 
 
-for root, dirs, files in os.walk(src_path, topdown=True):
+for root, dirs, files in os.walk(SRC_PATH, topdown=True):
     for name in files:
 
         if not name.endswith(".jpg") and not name.endswith(".png"):
@@ -35,4 +35,4 @@ for root, dirs, files in os.walk(src_path, topdown=True):
                 else:
                     img[i][j] = 0
 
-        cv2.imwrite(os.path.join(dst_path, name), img)
+        cv2.imwrite(os.path.join(DST_PATH, name), img)
