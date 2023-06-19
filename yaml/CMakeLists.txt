@@ -10,7 +10,7 @@ include_directories(. include)
 
 aux_source_directory(. SRCS)
 
-link_directories(${CMAKE_HOME_DIRECTORY})
+link_directories(${CMAKE_SOURCE_DIR})
 
 add_executable(${PROJECT_NAME} ${SRCS})
 

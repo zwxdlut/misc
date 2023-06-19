@@ -27,10 +27,10 @@ FUSE_FILTER = [2, 3, 4, 5, 7, 10, 21]
 for root, dirs, files in os.walk(src_path, topdown=True):
     for name in files:
 
-        if not name[-3:]=='jpg' and not name[-3:]=='png':
+        if not name.endswith(".jpg") and not name.endswith(".png"):
             continue
 
-        img = cv2.imread(os.path.join(src_path, name), cv2.IMREAD_GRAYSCALE)
+        img = cv2.imread(os.path.join(root, name), cv2.IMREAD_GRAYSCALE)
 
         for i in range(img.shape[0]):
             for j in range(img.shape[1]):
@@ -41,7 +41,3 @@ for root, dirs, files in os.walk(src_path, topdown=True):
 
         cv2.imwrite(os.path.join(dst_path, name), img)
         k += 1
-
-        if k > 10:
-            break
-

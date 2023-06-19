@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(fuse_labels)
+project(fix_labels)
 
 find_package(OpenCV REQUIRED)
 
@@ -13,7 +13,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 aux_source_directory(. SRCS)
 
-link_directories(${CMAKE_HOME_DIRECTORY})
+link_directories(${CMAKE_SOURCE_DIR})
 
 add_executable(${PROJECT_NAME} ${SRCS})
 

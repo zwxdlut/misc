@@ -23,7 +23,7 @@ set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -std=c++11; -g;
     -gencode arch=compute_80,code=sm_80
     -gencode arch=compute_86,code=sm_86)
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 link_directories(/usr/lib /usr/local/lib)
 
