@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 #include <vector>
+#include <map>
 #include <iostream>
 #include <algorithm>
 #include <string>
@@ -18,12 +19,38 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 
-#define SRC_PATH "/mnt/ext/data/traffic/seg/masks/train/"
-#define DST_PATH "/mnt/ext/data/traffic/seg/masks/train_out/"
+#define SRC_PATH "/mnt/ext/data/traffic/traffic/masks/train/"
+#define DST_PATH "/mnt/ext/data/traffic/traffic/fixed_masks/train/"
 
-#define FIXED_LABEL 1
+// // bdd100k lane
+// #define BACKGROUND 255
+// const std::map<uint8_t, uint8_t> kLABLE_MAP = 
+// {  
+//     {2,   0},  // 平行双白实线 
+//     {3,   1},  // 平行双黄实线
+//     {4,   2},  // 路缘石
+//     {6,   3},  // 平行单白实线
+//     {7,   4},  // 平行单黄实线
+//     {18,  5},  // 平行双白虚线
+//     {19,  6},  // 平行双黄虚线
+//     {22,  7},  // 平行单白虚线
+//     {23,  8},  // 平行单黄虚线
+//     {38,  9},  // 垂直单白实线
+//     {39, 10},  // 垂直单黄实线
+//     {48, 11},  // 人行横道
+// };
 
-const std::vector<uint8_t> LABEL_FILTER = {2, 3, 4, 5, 7, 10, 21};
+// traffic lane
+#define BACKGROUND 0
+const std::map<uint8_t, uint8_t> kLABLE_MAP = 
+{  
+    {2,   1},  // 实线 
+    {3,   2},  // 虚线
+    {4,   3},  // 停止线
+    {7,   4},  // 人行横道
+    {10,  2},  // 纵向减速标线
+    {13,  5},  // 路缘石
+};
 
 int main(int argc, char *argv[])
 {   
@@ -78,13 +105,15 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        cv::Mat img(img_ori.rows, img_ori.cols, CV_8UC1, cv::Scalar(0, 0, 0));
+        cv::Mat img(img_ori.rows, img_ori.cols, CV_8UC1, cv::Scalar(BACKGROUND, BACKGROUND, BACKGROUND));
 
         for (size_t k = 0, HW = img.rows * img.cols; k < HW; k++)
         {
-            if (LABEL_FILTER.end() != std::find(LABEL_FILTER.begin(), LABEL_FILTER.end(), img_ori.ptr<uint8_t>()[k]))
+            auto iter = kLABLE_MAP.find(img_ori.ptr<uint8_t>()[k]);
+    
+            if (kLABLE_MAP.end() != iter)
             {
-                img.ptr<uint8_t>()[k] = FIXED_LABEL;
+                img.ptr<uint8_t>()[k] = iter->second;
             }
         }
 

@@ -2,6 +2,7 @@
 build/
 __pycache__/
 .vscode/
+dl/IPM/output/
 
 # Files
 *.pyc

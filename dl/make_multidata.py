@@ -2,7 +2,7 @@ import os
 import shutil
 
 import cv2
-from numpy import imag
+import numpy as np
 
 """
 Make dataset for multi-task net by combining detection(yolo format) and segmentation(masks) datasets.
@@ -97,28 +97,27 @@ for type in types:
 
 
 # # 寻找原图分辨率
-# for name in sorted(os.listdir("det/images/val")):
+# for name in sorted(os.listdir("traffic/images/val")):
 #     path = os.path.join("pictures", name)
 
 #     if os.path.exists(path):
-#         print(f"copy {path} to temp/val")
-#         os.popen(f"cp -rv {path} temp/val")
-#         os.popen("sync")
+#         dst_path = "tmp/val"
+#         print(f"copy {path} to {dst_path}")
+#         shutil.copy(path, dst_path)
+
 
 # # 创建空标签
-# labels = sorted(os.listdir("all-traffic/labels/train"))
-
-# for name in sorted(os.listdir("all-traffic/images/train")):
+# labels = sorted(os.listdir("traffic/labels/train"))
+# for name in sorted(os.listdir("traffic/images/train")):
 #     name = name.replace(".jpg", ".txt")
 #     if name not in labels:
 #         path = os.path.join("temp", name)
 #         with open(path, "w") as f:
 #             print(f"write {path}")
 
-# # 创建空掩图    
-# masks = sorted(os.listdir("all-traffic/masks/val"))
-
-# for name in sorted(os.listdir("all-traffic/images/val")):
+# # 创建空掩图  
+# masks = sorted(os.listdir("traffic/masks/val"))
+# for name in sorted(os.listdir("traffic/images/val")):
 #     name = name.replace(".jpg", ".png")
 #     if name not in masks:
 #         path = os.path.join("temp", name)
