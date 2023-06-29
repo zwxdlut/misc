@@ -23,7 +23,7 @@
 #define DST_PATH "/mnt/ext/data/traffic/traffic/fixed_masks/train/"
 
 // // bdd100k lane
-// #define BACKGROUND 255
+// #define BACKGROUND 12
 // const std::map<uint8_t, uint8_t> kLABLE_MAP = 
 // {  
 //     {2,   0},  // 平行双白实线 
