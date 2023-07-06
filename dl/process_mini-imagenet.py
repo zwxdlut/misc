@@ -7,7 +7,7 @@ from PIL import Image
 Regenerate labels of mini-imagenet.
 """
 
-root_path = "/mnt/ext/data/mini-imagenet" # 指向数据集的根目录
+root_path = "/mnt/ext/data/imagenet/mini-imagenet" # 指向数据集的根目录
 
 def process_data():
     train_csv_path=root_path + "/new_train.csv"
