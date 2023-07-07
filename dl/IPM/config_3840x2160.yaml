@@ -1,10 +1,10 @@
 
-image_dir: /mnt/ext/data/traffic_all/seg/masks/val
+image_dir: /mnt/ext/data/traffic/seg/images/train
 output_dir: ./output
 
 width: 3840
 height: 2160
-channel: 1
+channel: 3
 resize: null
 # resize: [150, 250]
 

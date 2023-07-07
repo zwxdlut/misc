@@ -5,9 +5,9 @@ def config_parser():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str,  default='./config_3840x2160.yaml', help='config_file')
-    parser.add_argument("--image-dir", type=str, default='./data/images', help='input image directiory')
-    parser.add_argument("--output-dir", type=str, default='./output', help='output directiory')
+    parser.add_argument("--config", type=str,  default='./config_3840x2160.yaml', help='config file')
+    parser.add_argument("--image_dir", type=str, default='./data/images', help='image directiory')
+    parser.add_argument("--output_dir", type=str, default='./output', help='output directiory')
     parser.add_argument("--resize", nargs='+', type=int, help='image resize scale for save after IPM')
     # parser.add_argument("--width", type=int, default=960, help='image width')
     # parser.add_argument("--height", type=int, default=540, help='image height')
@@ -22,7 +22,7 @@ def config_parser():
     # parser.add_argument("--ipm_step_xy", type=float, default=0.04, help='ipm step 3d, unit:m')
     parser.add_argument("--ipm_step_xy", type=float, default=0.01, help='ipm step 3d, unit:m')
     parser.add_argument("--ipm_height_y_start", type=float, default=3.0, help='ipm start 3d y, unit:m')
-    parser.add_argument("--intrinsic", nargs='+', type=float, help='input camera intrinsic parameters fx,fy,cx,cy')
+    parser.add_argument("--intrinsic", nargs='+', type=float, help='camera intrinsic parameters fx,fy,cx,cy')
     parser.add_argument("--R_ccs2ocs", nargs='+', type=float, help='rotation matrix from ccs to ocs')
     parser.add_argument("--T_ccs2ocs", nargs='+', type=float, help='translation vector from ccs to ocs')
 
@@ -60,18 +60,10 @@ def main():
         args.ipm_height_y_start = cfg['ipm_height_y_start']
     if cfg.get('intrinsic') is not None:
         args.intrinsic = cfg['intrinsic']
-    elif args.intrinsic is None:
-        args.intrinsic = [2141.9937, 2144.1709, 1724.7345, 1106.3953]
     if cfg.get('R_ccs2ocs') is not None:
         args.R_ccs2ocs = cfg['R_ccs2ocs']
-    elif args.R_ccs2ocs is None:
-        args.R_ccs2ocs = [0.999616, -0.00817016, 0.0264734,
-                          0.0263923, -0.00988875, -0.999603,
-                          0.0084287, 0.999918, -0.00966933]
     if cfg.get('T_ccs2ocs') is not None:
         args.T_ccs2ocs = cfg['T_ccs2ocs']
-    elif args.T_ccs2ocs is None:
-        args.T_ccs2ocs = [-0.498692, 1.619, 2.51533]
 
     # # 960x540
     # if args.intrinsic is None:
@@ -83,15 +75,15 @@ def main():
     # if args.T_ccs2ocs is None:
     #     args.T_ccs2ocs = [0.2317971025971608, 1.713913045205863, 1.913995241236965]
     
-    # # 3840x2160
-    # if args.intrinsic is None:
-    #     args.intrinsic = [2141.9937, 2144.1709, 1724.7345, 1106.3953]
-    # if args.R_ccs2ocs is None:
-    #     args.R_ccs2ocs = [0.999616, -0.00817016, 0.0264734,
-    #                       0.0263923, -0.00988875, -0.999603,
-    #                       0.0084287, 0.999918, -0.00966933]
-    # if args.T_ccs2ocs is None:
-    #     args.T_ccs2ocs = [-0.498692, 1.619, 2.51533]
+    # 3840x2160
+    if args.intrinsic is None:
+        args.intrinsic = [2141.9937, 2144.1709, 1724.7345, 1106.3953]
+    if args.R_ccs2ocs is None:
+        args.R_ccs2ocs = [0.999616, -0.00817016, 0.0264734,
+                          0.0263923, -0.00988875, -0.999603,
+                          0.0084287, 0.999918, -0.00966933]
+    if args.T_ccs2ocs is None:
+        args.T_ccs2ocs = [-0.498692, 1.619, 2.51533]
 
     # 找到IPM图像上对应到原始图像上的四个边界点
     model = ipm.IPM(args)
