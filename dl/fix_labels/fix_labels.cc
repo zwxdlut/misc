@@ -19,8 +19,8 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 
-#define SRC_PATH "/mnt/ext/data/traffic/traffic/masks/train/"
-#define DST_PATH "/mnt/ext/data/traffic/traffic/fixed_masks/train/"
+#define IMG_DIR "/mnt/ext/data/traffic/traffic/masks/train/"
+#define OUT_DIR "/mnt/ext/data/traffic/traffic/fixed_masks/train/"
 
 // // bdd100k lane
 // #define BACKGROUND 12
@@ -59,36 +59,36 @@ int main(int argc, char *argv[])
     struct stat sta;
     int ret = 0;
     size_t count = 0;
-    char src_path[1024] = SRC_PATH;
-    char dst_path[1024] = DST_PATH;
+    char img_dir[1024] = IMG_DIR;
+    char out_dir[1024] = OUT_DIR;
 
     if (1 < argc)
     {
-        strcpy(src_path, argv[1]);
+        strcpy(img_dir, argv[1]);
     }
 
     if (2 < argc)
     {
-        strcpy(dst_path, argv[2]);
+        strcpy(out_dir, argv[2]);
     }
 
-    if (NULL == (dir = opendir(src_path)))
+    if (NULL == (dir = opendir(img_dir)))
     {
-        printf("open dir %s error(%d), %s!\n", src_path, errno, strerror(errno));
+        printf("open dir %s error(%d), %s!\n", img_dir, errno, strerror(errno));
         return -1;
     }
 
     while(NULL != (st = readdir(dir)))
     {
-        char src[1024] = {0};
+        char path[1024] = {0};
 
-        strcpy(src, src_path);
-        if(src_path[strlen(src_path)-1] != '/') strcat(src, "/");
-        strcat(src, st->d_name);
+        strcpy(path, img_dir);
+        if(img_dir[strlen(img_dir)-1] != '/') strcat(path, "/");
+        strcat(path, st->d_name);
 
-        if(0 > (ret = stat(src, &sta)))
+        if(0 > (ret = stat(path, &sta)))
         {
-            printf("read stat %s error(%d), %s!\n", src, errno, strerror(errno));
+            printf("read stat %s error(%d), %s!\n", path, errno, strerror(errno));
             continue;
         }
 
@@ -97,11 +97,11 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        cv::Mat img_ori = cv::imread(src, cv::IMREAD_GRAYSCALE);
+        cv::Mat img_ori = cv::imread(path, cv::IMREAD_GRAYSCALE);
 
         if (!img_ori.data) 
         {
-            printf("image %s no data\n", src);
+            printf("image %s no data\n", path);
             continue;
         }
 
@@ -117,20 +117,18 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (0 != mkdir(dst_path, S_IRUSR | S_IWUSR | S_IXUSR | S_IRWXG | S_IRWXO) 
+        if (0 != mkdir(out_dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRWXG | S_IRWXO) 
             && EEXIST != errno)
         {
             printf("mkdir error(%d), %s\n", errno, strerror(errno));
         }
 
-        char dst[1024] = {0};
-
-        strcpy(dst, dst_path);
-        if(dst_path[strlen(dst_path)-1] != '/') strcat(dst, "/");
-        strcat(dst, st->d_name);
-        cv::imwrite(dst, img);
+        strcpy(path, out_dir);
+        if(out_dir[strlen(out_dir)-1] != '/') strcat(path, "/");
+        strcat(path, st->d_name);
+        cv::imwrite(path, img);
         count++;
-        printf("write image %s\n", dst);
+        printf("write image %s\n", path);
     }
 
     closedir(dir);
