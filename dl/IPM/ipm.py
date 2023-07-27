@@ -34,8 +34,6 @@ class IPM():
         self.ipm_image_height = int(self.ipm_height_y_3d / self.ipm_step_xy)
         self.resize = args.resize
 
-        return
-
     def pair(self, ipm_image_width, ipm_image_height):
         for r in range(ipm_image_height):
             for c in range(ipm_image_width):
@@ -54,12 +52,14 @@ class IPM():
         A = np.mat([[A00,A01],[A10,A11]])
         b = np.mat([b0,b1])
         X = solve(A,b)
+
         return X.A  # numpy.ndarray [2,1]
 
     def calc_uv_by_ccs_xy(self, pt_ccs):
         pt_ocs = self.R_ccs2ocs @ pt_ccs + self.T_ccs2ocs.reshape(3)
         pt_ocs = pt_ocs / pt_ocs[2]
         pt_uv = self.K @ pt_ocs
+
         return (pt_uv + 0.5).astype(np.int32)
 
     def get_ipm_rect(self):
@@ -134,6 +134,7 @@ class IPM():
         idx = list(np.where((pt_uv_array[:,1]>self.vanish_line) & (pt_uv_array[:,1]<self.raw_H) & (pt_uv_array[:,0]>=0) & (pt_uv_array[:,0]<self.raw_W)))[0]
         img_uvs = pt_uv_array[idx[:], :2]
         ipm_rcs = rc_array[idx[:],:]
+
         return ipm_rcs,img_uvs
 
     def undistort(self, img):
@@ -200,7 +201,3 @@ class IPM():
                 # print(f"write compare image {merge_path}")
             except:
                 print(f"Warning: image {os.path.join(self.image_dir, f)} size not match!")
-
-        return
-
-

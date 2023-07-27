@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: UTF-8 -*-
-
 """Python-Socket server"""
 
 print("\n############################## %s ##################################\n" %(__doc__))

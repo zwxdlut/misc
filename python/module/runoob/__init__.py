@@ -1,8 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: UTF-8 -*-
-
-if __name__ == '__main__':
-    print('Main process')
+if "__main__" == __name__:
+    print("Main process.")
 else:
-    print('Initialize the runoob package.')
-    print("__path__:", __path__)
+    print("Initialize the runoob package, __path__ = ".format(__path__))

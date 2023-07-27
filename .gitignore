@@ -1,8 +1,8 @@
 # Folders
-build/
-__pycache__/
 .vscode/
-dl/IPM/output/
+__pycache__/
+build/
+output/
 
 # Files
 *.pyc
