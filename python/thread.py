@@ -62,6 +62,7 @@ class SendThread(threading.Thread):
 
         print("SendThread.run: exit")
 
+
 signal.signal(signal.SIGINT, sig_handler)
 signal.signal(signal.SIGHUP, sig_handler)
 signal.signal(signal.SIGTERM, sig_handler)
@@ -103,9 +104,8 @@ def test(x, y):
     print("test:", x, y)
     return x + y
 
-print("test() return", test(100, 200))
 
-print()
+print("test() return", test(100, 200))
 
 
 # class decorator
@@ -123,5 +123,6 @@ class Wrapper(object):
 def call(x, y):
     print("call:", x, y)
     return x + y
+
 
 print("call() return", call(100, 200))

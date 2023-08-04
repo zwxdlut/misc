@@ -3,11 +3,7 @@ __pycache__/
 .vscode/
 .tox/
 *.egg-info/
-build/
 dist/
-output/
 
 # Files
 *.pyc
-*.pth
-*.onnx
