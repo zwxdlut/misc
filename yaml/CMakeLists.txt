@@ -12,7 +12,7 @@ include_directories(
 
 aux_source_directory(${CMAKE_SOURCE_DIR} SRCS)
 
-link_directories(${CMAKE_SOURCE_DIR})
+link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 
