@@ -18,7 +18,6 @@ public:
     ~timer();
 
     int32_t start(const uint32_t _period, handler _handler, void *_param = nullptr);
-
     int32_t stop();
     
 private:
@@ -29,4 +28,5 @@ private:
     handler handler_;
     void *param_ = nullptr;
 };
+
 #endif // __TIMER_H__

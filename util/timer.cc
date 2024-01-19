@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdio.h>
-#include "log.h"
+
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -9,7 +9,7 @@
 #include <sys/ioctl.h>
 
 #include "timer.h"
-
+#include "log.h"
 
 timer::~timer()
 {

@@ -22,5 +22,3 @@ clean:
 .PHNOY:
 	modules modules_install clean
 endif
-
-

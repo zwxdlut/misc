@@ -6,4 +6,3 @@ Misc.
 
 ## License
 * Licensed under the GPL license.
-

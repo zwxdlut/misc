@@ -17,5 +17,3 @@ do
     printf "%-10s %-10s %-10s\n" $mem $mem_total $gpu | tee -a $outfile
     sleep 1s
 done
-
-

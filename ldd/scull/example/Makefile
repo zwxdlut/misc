@@ -16,4 +16,3 @@ clean:
 	rm -rf *.o $(EXECUTABLE_NAME)
 	
 .PHONY: clean
-

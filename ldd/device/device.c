@@ -2,18 +2,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <fcntl.h>
+#include <unistd.h> 
+#include <errno.h>
+#include <termios.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
-#include <fcntl.h>
-#include <unistd.h> 
-#include <errno.h>
 #include <net/if.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
 #include <linux/can/error.h>
-#include <termios.h>
 
 #include "device.h"
 
