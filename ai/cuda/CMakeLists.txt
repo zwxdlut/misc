@@ -24,11 +24,11 @@ set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}; -std=c++11; -g;
     -gencode arch=compute_86,code=sm_86)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR} 
-    ${CMAKE_SOURCE_DIR}/include 
+    ${CMAKE_CURRENT_SOURCE_DIR} 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include 
     ${CUDA_INCLUDE_DIRS})
 
-aux_source_directory(${CMAKE_SOURCE_DIR} SRCS)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRCS)
 
 link_directories(/usr/local/cuda)
 
