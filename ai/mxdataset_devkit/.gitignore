@@ -1,19 +1,13 @@
 # general 
 build/
+download/
 output/
 .vscode/
 __pycache__/
 *.pyc
-*.pth
-*.onnx
 
 # python packing
 dist/
 sdist/
 .tox/
 *.egg*/
-
-# catkin
-devel/
-.catkin_workspace
-ros/src/CMakeLists.txt

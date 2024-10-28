@@ -1,9 +1,0 @@
-# Folders
-__pycache__/
-.vscode/
-.tox/
-*.egg-info/
-dist/
-
-# Files
-*.pyc

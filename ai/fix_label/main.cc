@@ -40,17 +40,32 @@
 //     {48, 11},  // 人行横道
 // };
 
-// traffic lane
+// // bdd100k drivable area
+// #define BACKGROUND 0
+// const std::map<uint8_t, uint8_t> kLABLE_MAP = 
+// {  
+//     {0, 1},  // 主路
+//     {1, 1},  // 辅路
+// };
+
+// bdd100k-yolop lane
 #define BACKGROUND 0
 const std::map<uint8_t, uint8_t> kLABLE_MAP = 
 {  
-    {2,   1},  // 实线 
-    {3,   2},  // 虚线
-    {4,   3},  // 停止线
-    {7,   4},  // 人行横道
-    {10,  2},  // 纵向减速标线
-    {13,  5},  // 路缘石
+    {255, 1},  // 车道线
 };
+
+// // traffic lane
+// #define BACKGROUND 0
+// const std::map<uint8_t, uint8_t> kLABLE_MAP = 
+// {  
+//     {2,   1},  // 实线 
+//     {3,   2},  // 虚线
+//     {4,   3},  // 停止线
+//     {7,   4},  // 人行横道
+//     {10,  2},  // 纵向减速标线
+//     {13,  5},  // 路缘石
+// };
 
 int main(int argc, char *argv[])
 {   
@@ -105,7 +120,11 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        cv::Mat img(img_ori.rows, img_ori.cols, CV_8UC1, cv::Scalar(BACKGROUND, BACKGROUND, BACKGROUND));
+        cv::Mat tmp;
+        cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(7, 7));
+        cv::dilate(img_ori, tmp, element);
+        img_ori = tmp;
+        cv::Mat img(img_ori.rows, img_ori.cols, CV_8UC1, cv::Scalar(BACKGROUND));
 
         for (size_t k = 0, HW = img.rows * img.cols; k < HW; k++)
         {

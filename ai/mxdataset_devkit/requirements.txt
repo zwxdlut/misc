@@ -1,0 +1,8 @@
+pyyaml
+requests
+boto3
+lakefs_client @ git+http://192.168.70.202:30453/ai-model/lakefs_client.git@master
+pycocotools>=2.0.6
+setuptools>=43.0.0
+build
+tox

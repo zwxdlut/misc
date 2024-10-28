@@ -1,0 +1,63 @@
+
+# s3 config
+s3_url: http://192.168.70.202:32709
+s3_access_key_id: null  # if null, use aws configure
+s3_secret_access_key: null  # if null, use aws configure
+
+# migration config
+bucket: labeldata 
+prefix: annotation/tasks/data_202301
+migration_download_dir: /mnt/data/mxdata/minio
+migration_destination_dir: /mnt/data/mxdata/mxdataset
+
+# lakefs config
+lakefs_host: http://192.168.70.202:30495/api/v1
+lakefs_username: null
+lakefs_password: null
+lakefs_repo: mxdataset
+lakefs_branch: main
+
+lakefs_upload_dir: /mnt/data/mxdata/mxdataset
+lakefs_download_dir: /mnt/data/mxdata/mxdataset-dist
+
+# categories
+categories:
+  detction:
+    - traffic_light
+    - traffic_sign
+    - traffic_board_common
+    - traffic_board_tour
+    - traffic_board_notice
+    - s_io
+    - traffic_turn
+    - word
+    - Line_Yield_Deceleration_detect
+    - tunnel_inlet_detect
+    - tunnel_outlet_detect
+    - bicycle
+    - Line_Yield_Pause_detect
+    - car_number
+    - face
+  segmentation:
+    - background
+    - void
+    - dividing
+    - guiding
+    - stopping
+    - chevron
+    - parking
+    - zebra
+    - turn
+    - speed_bump
+    - fish_line
+    - no parking
+    - pole
+    - rs_curb
+    - rs_guard
+    - rs_o1
+    - wall
+    - green_belt
+    - edge
+    - attention
+    - ground_word
+    - dividing_other
