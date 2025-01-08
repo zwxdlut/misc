@@ -1,11 +1,10 @@
-# general 
+# general
+obj/
 build/
 output/
 .vscode/
 __pycache__/
 *.pyc
-*.pth
-*.onnx
 
 # python packing
 dist/
@@ -17,3 +16,7 @@ sdist/
 devel/
 .catkin_workspace
 ros/src/CMakeLists.txt
+
+# models
+*.pth
+*.onnx
