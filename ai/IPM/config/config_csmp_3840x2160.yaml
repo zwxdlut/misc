@@ -1,0 +1,24 @@
+image_dir: ./data/images_csmp_3840x2160
+output_dir: ./output
+
+image_width: 3840
+image_height: 2160
+resize: null
+
+vanish_line: 1120 # 消失线
+world_width: 30 # IPM中真实距离x方向[-15, 15], 单位：m
+world_height: 20 # IPM中真实距离y方向[0, 20], 单位：m
+world_pixel: 0.04 # 像素点真实距离，单位: m
+world_y_start: 3.0 # 单位: m
+
+# 畸变参数k1 k2 p1 p2 [k3, [k4, k5, k6]]
+distort: [-0.3847, 0.1769, -0.000679, -0.000386, -0.0413]
+
+# 相机内参fx fy cx cy
+intrinsic: [2141.9937, 2144.1709, 1724.7345, 1106.3953]
+
+# 相机外参world2camera 车头坐标系（右前上）-> 相机坐标系（右下前）
+Rwc: [0.999616, -0.00817016, 0.0264734,
+      0.0263923, -0.00988875, -0.999603,
+      0.0084287, 0.999918, -0.00966933]
+Twc: [-0.498692, 1.619, 2.51533]

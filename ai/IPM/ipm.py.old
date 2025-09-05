@@ -1,0 +1,181 @@
+import os
+import sys
+import cv2
+
+import numpy as np
+from numpy.linalg import solve
+
+
+class IPM():
+    def __init__(self, cfg):
+        # 参数
+        self.image_height, self.image_width = cfg["image_height"], cfg["image_width"]
+        self.vanish_line = cfg["vanish_line"]
+        self.world_width, self.world_height = cfg["world_width"], cfg["world_height"]
+        self.world_pixel = cfg["world_pixel"]
+        self.world_y_start = cfg["world_y_start"]
+        self.distort = np.array(cfg["distort"]) if cfg["distort"] is not None else None
+        self.K = np.array([cfg["intrinsic"][0], 0.0, cfg["intrinsic"][2], 
+                           0.0, cfg["intrinsic"][1], cfg["intrinsic"][3], 
+                           0.0, 0.0, 1.0]).reshape(3,3)
+        self.Rwc = np.array(cfg["Rwc"]).reshape(3,3)
+        self.Twc = np.array(cfg["Twc"]).reshape(3,1)
+    
+        # 读入文件夹下所有图片
+        os.makedirs(cfg["image_dir"], exist_ok=True)
+        self.image_dir = cfg["image_dir"]
+        self.images_name = sorted(os.listdir(cfg["image_dir"]))
+
+        # 输出文件路径
+        os.makedirs(cfg["output_dir"], exist_ok=True)
+        self.output_dir = cfg["output_dir"]
+
+        # 计算IPM图像大小
+        self.ipm_image_width = int(self.world_width / self.world_pixel)
+        self.ipm_image_height = int(self.world_height / self.world_pixel)
+        self.resize = cfg["resize"]
+
+    def pair(self, ipm_image_width, ipm_image_height):
+        for r in range(ipm_image_height):
+            for c in range(ipm_image_width):
+                yield r,c
+
+    def calc_ccs_xy_by_uv(self, uv):
+        p_uv = np.append(np.array(uv),1)
+        p_cn = np.linalg.inv(self.K) @ p_uv
+        # AX=b
+        A00 = self.Rwc[2,0] * p_cn[0] - self.Rwc[0,0]
+        A01 = self.Rwc[2,1] * p_cn[0] - self.Rwc[0,1]
+        A10 = self.Rwc[2,0] * p_cn[1] - self.Rwc[1,0]
+        A11 = self.Rwc[2,1] * p_cn[1] - self.Rwc[1,1]
+        b0 = self.Twc[0] - self.Twc[2] * p_cn[0]
+        b1 = self.Twc[1] - self.Twc[2] * p_cn[1]
+        A = np.asmatrix([[A00,A01],[A10,A11]])
+        b = np.asmatrix([b0,b1])
+        X = solve(A,b)
+
+        return X.A  # numpy.ndarray [2,1]
+
+    def calc_uv_by_ccs_xy(self, pt_ccs):
+        pt_ocs = self.Rwc @ pt_ccs + self.Twc.reshape(3)
+        pt_ocs = pt_ocs / pt_ocs[2]
+        pt_uv = self.K @ pt_ocs
+
+        return (pt_uv + 0.5).astype(np.int32)
+
+    def get_ipm_rect(self):
+        # 对应960x540的投影区域
+        uv_lu = [0,309]
+        uv_ru = [self.image_width-1,309]
+        uv_lb = [0,433]
+        uv_rb = [self.image_width-1,433]
+
+        ccs_lb = self.calc_ccs_xy_by_uv(uv_lb)
+        ccs_rb = self.calc_ccs_xy_by_uv(uv_rb)
+        try:
+            assert((-self.world_width/2.0<ccs_lb[0,0]<ccs_rb[0,0]<self.world_width/2.0) and (0<ccs_lb[1,0]<self.world_height) and (0<ccs_rb[1,0]<self.world_height))
+        except:
+            print("Error: world_width is too big.")
+            sys.exit(1)
+
+        ccs_lu = self.calc_ccs_xy_by_uv(uv_lu)
+        ccs_ru = self.calc_ccs_xy_by_uv(uv_ru)
+        
+        if ((ccs_lu[0,0]<-self.world_width/2.0) or (ccs_lu[1,0]>self.world_height)):
+            ccs_lu = np.array([max(ccs_lu[0,0],-self.world_width/2.0), min(ccs_lu[1,0],self.world_height), 0])
+            uv_lu = self.calc_uv_by_ccs_xy(ccs_lu).tolist()[:2]
+            if (uv_lu[0]<0):
+                uv_lu[0] = 0
+            if (uv_lu[1]<self.vanish_line):
+                uv_lu[1] = self.vanish_line
+            ccs_lu = self.calc_ccs_xy_by_uv(uv_lu)
+
+        if ((ccs_ru[0,0]>self.world_width/2.0) or (ccs_ru[1,0]>self.world_height)):
+            ccs_ru = np.array([min(ccs_ru[0,0],self.world_width/2.0), min(ccs_ru[1,0],self.world_height), 0])
+            uv_ru = self.calc_uv_by_ccs_xy(ccs_ru).tolist()[:2]
+            if (uv_ru[0]>=self.image_width):
+                uv_ru[0] = self.image_width-1
+            if (uv_ru[1]<self.vanish_line):
+                uv_ru[1] = self.vanish_line
+            ccs_ru = self.calc_ccs_xy_by_uv(uv_ru)
+
+        ipm_lu = [max(0, int((ccs_lu[0,0]+self.world_width/2.0)/self.world_pixel)), max(0, self.ipm_image_height-1-int(ccs_lu[1,0]/self.world_pixel))]
+        ipm_ru = [min(self.ipm_image_width-1, int((ccs_ru[0,0]+self.world_width/2.0)/self.world_pixel)), max(0, self.ipm_image_height-1-int(ccs_ru[1,0]/self.world_pixel))]
+        ipm_lb = [max(0, int((ccs_lb[0,0]+self.world_width/2.0)/self.world_pixel)), min(self.ipm_image_height-1, self.ipm_image_height-1-int(ccs_lb[1,0]/self.world_pixel))]
+        ipm_rb = [min(self.ipm_image_width-1, int((ccs_rb[0,0]+self.world_width/2.0)/self.world_pixel)), min(self.ipm_image_height-1, self.ipm_image_height-1-int(ccs_rb[1,0]/self.world_pixel))]
+
+        uv_list = [uv_lu, uv_ru, uv_lb, uv_rb]
+        ipm_list = [ipm_lu, ipm_ru, ipm_lb, ipm_rb]
+
+        uv_array = np.array(uv_list, dtype=np.float32)
+        ipm_array = np.array(ipm_list, dtype=np.float32)
+
+        return uv_array, ipm_array
+
+    def undistort(self, img):
+        height = img.shape[0]
+        width  = img.shape[1]
+        camera_matrix = self.K.astype(np.float32)
+        distCoeffs = self.distort.astype(np.float32)
+        map1, map2 = cv2.initUndistortRectifyMap(camera_matrix, distCoeffs, None, camera_matrix, (width, height), cv2.CV_32FC1)
+        img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_NEAREST)
+
+        return img
+
+    def get_ipm_map(self):
+        """
+        与onboard中c++IPM相同
+        """
+        rc_array = np.zeros((self.ipm_image_height * self.ipm_image_width,2),dtype=np.int32)
+        pt_ccs_array = np.zeros((self.ipm_image_height * self.ipm_image_width,3))   # [w * h, 3]
+        for r, c in self.pair(self.ipm_image_width, self.ipm_image_height):
+            x = -self.world_width / 2.0 + self.world_pixel * c
+            y = self.world_pixel * (self.ipm_image_height - 1 - r) + self.world_y_start
+            z = 0
+            pt_ccs = np.array([x,y,z]).reshape(1,3)
+            pt_ccs_array[r * self.ipm_image_width + c,:] = pt_ccs[0,:]
+            rc_array[r*self.ipm_image_width+c,0] = r
+            rc_array[r*self.ipm_image_width+c,1] = c
+
+        pt_ocs_array = pt_ccs_array @ self.Rwc.transpose() + self.Twc.reshape(1,3)  # [N,3]
+        pt_ocs_array = (pt_ocs_array / pt_ocs_array[:,2].reshape(-1,1))
+        pt_uv_array = pt_ocs_array @ self.K.transpose()
+        pt_uv_array = (pt_uv_array + 0.5).astype(np.int32)
+
+        idx = list(np.where((pt_uv_array[:,1]>self.vanish_line) & (pt_uv_array[:,1]<self.image_height) & (pt_uv_array[:,0]>=0) & (pt_uv_array[:,0]<self.image_width)))[0]
+        img_uvs = pt_uv_array[idx[:], :2]
+        ipm_rcs = rc_array[idx[:],:]
+
+        return ipm_rcs, img_uvs
+
+    def transform(self):
+        ipm_rcs, img_uvs = self.get_ipm_map()
+
+        # # opencv的实现
+        # uv_array, ipm_array = self.get_ipm_rect()
+        # M = cv2.getPerspectiveTransform(uv_array, ipm_array)
+
+        for name in self.images_name:
+            img = cv2.imread(os.path.join(self.image_dir, name), cv2.IMREAD_GRAYSCALE | cv2.IMREAD_COLOR)
+            # 输入图片大小与默认尺寸不匹配报错！提醒：如果图片大小不匹配需要对应修改内参矩阵和消失线
+            assert((img.shape[0]==self.image_height) and (img.shape[1]==self.image_width))
+            dst_path = os.path.join(self.output_dir, name)
+
+            try:
+                if self.distort is not None:
+                    img = self.undistort(img)
+
+                img_ipm = np.zeros((self.ipm_image_height, self.ipm_image_width, 3), dtype=np.uint8)
+                img_ipm[ipm_rcs[:,0],ipm_rcs[:,1]] = img[img_uvs[:,1],img_uvs[:,0]]
+
+                # # opencv的实现
+                # img_ipm = cv2.warpPerspective(img, M, (self.ipm_image_width,self.ipm_image_height))
+
+                if self.resize is not None:
+                    img_ipm = cv2.resize(img_ipm, dsize=tuple(self.resize), interpolation=cv2.INTER_NEAREST)
+ 
+                cv2.imwrite(dst_path, img_ipm)
+                print(f"write image {dst_path}")
+
+            except:
+                print(f"Warning: image {os.path.join(self.image_dir, name)} size not match!")
