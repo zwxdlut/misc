@@ -10,18 +10,19 @@
 /**
  * Timer.
  */
-class timer
+class Timer
 {
 public:
     typedef void (*handler)(void *_param);
 
-    ~timer();
+    ~Timer();
 
-    int32_t start(const uint32_t _period, handler _handler, void *_param = nullptr);
+    int32_t start(const uint32_t _period, handler _handler, void *_param = nullptr, const bool _immediately = true);
+
     int32_t stop();
     
 private:
-    static constexpr const char *TAG = "timer";
+    static constexpr const char *TAG = "Timer";
 
     bool stopped = true;
     timer_t timer_;

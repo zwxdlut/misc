@@ -23,7 +23,7 @@
  ******************************************************************************/
 void print_buffer(const char _prefix[], const uint32_t _id, const void *_buf, const size_t _size)
 {
-#if defined _UDEBUG
+#ifdef _UDEBUG
     if (NULL == _buf)
     {
         LOGE("BUFFER", "%s: Buffer is null!\n", _prefix);

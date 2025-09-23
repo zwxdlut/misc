@@ -11,12 +11,12 @@
 #include "timer.h"
 #include "log.h"
 
-timer::~timer()
+Timer::~Timer()
 {
     stop();
 }
 
-int32_t timer::start(const uint32_t _period, handler _handler, void *_param)
+int32_t Timer::start(const uint32_t _period, handler _handler, void *_param, const bool _immediately)
 {
     handler_ = _handler;
     param_ = _param;
@@ -27,7 +27,7 @@ int32_t timer::start(const uint32_t _period, handler _handler, void *_param)
     evp.sigev_notify = SIGEV_THREAD; 
     evp.sigev_notify_function = [](union sigval _s)
     {
-        timer *p = (timer*)_s.sival_ptr;
+        Timer *p = (Timer*)_s.sival_ptr;
 
         if (nullptr != p->handler_)
         {
@@ -42,10 +42,11 @@ int32_t timer::start(const uint32_t _period, handler _handler, void *_param)
     }  
 
     struct itimerspec ts;
+    memset(&ts, 0, sizeof(struct itimerspec));
     ts.it_interval.tv_sec = _period / 1000;
     ts.it_interval.tv_nsec = (_period % 1000) * 1000 * 1000;  
-    ts.it_value.tv_sec = _period / 1000;
-    ts.it_value.tv_nsec = (_period % 1000) * 1000 * 1000; 
+    ts.it_value.tv_sec = _immediately ? 0 : _period / 1000;
+    ts.it_value.tv_nsec = _immediately ? 1 : (_period % 1000) * 1000 * 1000; 
 
     if (0 != timer_settime(timer_, 0, &ts, NULL))  
     {  
@@ -58,7 +59,7 @@ int32_t timer::start(const uint32_t _period, handler _handler, void *_param)
     return 0;
 }
 
-int32_t timer::stop()
+int32_t Timer::stop()
 {
     if (stopped)
     {

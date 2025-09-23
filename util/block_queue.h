@@ -7,10 +7,10 @@
 #include <functional>
 
 /**
- * Block queue, thread safety.
+ * Blocking queue, thread safety.
  */
 template<typename T>
-class block_queue : public std::queue<T>
+class BlockQueue : public std::queue<T>
 {
 public:
     using base = std::queue<T>;
@@ -23,7 +23,7 @@ public:
         cond_.notify_all();
     }
 
-    T take()
+    T& take()
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
@@ -32,28 +32,24 @@ public:
             cond_.wait(lock);
         }
 
-        auto ret = base::front();
-
-        base::pop();
-
-        return ret;
+        return base::front();
     }
 
-    T pull()
+    void pull()
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
-        auto ret = base::front();
+        if (0 == base::size())
+        {
+            return;
+        }
 
         base::pop();
-
-        return ret;
     }
 
     void notify()
     {
         std::lock_guard<std::mutex> lock(mutex_);
-
         cond_.notify_all();
     }
 

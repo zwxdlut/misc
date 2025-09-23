@@ -27,10 +27,10 @@
     #define LIGHT_GRAY   "\033[0;37m"
     #define WHITE        "\033[1;37m"
 
-    #define LOGI(TAG, format, ...) do {printf(LIGHT_GRAY "%s::" format NONE, TAG, ##__VA_ARGS__);} while(0)
-    #define LOGW(TAG, format, ...) do {printf(YELLOW "%s::" format NONE, TAG, ##__VA_ARGS__);} while(0)
-    #define LOGE(TAG, format, ...) do {printf(LIGHT_RED "%s::" format NONE, TAG, ##__VA_ARGS__);} while(0)
-    #define LOGD(TAG, format, ...) do {printf(LIGHT_CYAN "%s::" format NONE, TAG, ##__VA_ARGS__);} while(0)
+    #define LOGI(TAG, format, ...) do {printf(LIGHT_GRAY "[%s] " format NONE, TAG, ##__VA_ARGS__);} while(0)
+    #define LOGW(TAG, format, ...) do {printf(YELLOW "[%s] " format NONE, TAG, ##__VA_ARGS__);} while(0)
+    #define LOGE(TAG, format, ...) do {printf(LIGHT_RED "[%s] " format NONE, TAG, ##__VA_ARGS__);} while(0)
+    #define LOGD(TAG, format, ...) do {printf(LIGHT_CYAN "[%s] " format NONE, TAG, ##__VA_ARGS__);} while(0)
 #endif
 
 #endif // __LOG_H__
