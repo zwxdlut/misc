@@ -8,7 +8,7 @@ def config_parser():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str,  default="config_csmp_960x540.yaml", help="config file")
+    parser.add_argument("--config", type=str,  default="config_ptz.yaml", help="config file")
     parser.add_argument("--image_dir", type=str, help="image directiory")
     parser.add_argument("--output_dir", type=str, help="output directiory")
     parser.add_argument("--image_width", type=int, help="image width")
@@ -20,8 +20,8 @@ def config_parser():
     parser.add_argument("--world_pixel", type=float, help="world pixel, unit:m")
     parser.add_argument("--world_y_start", type=float, help="world y start, unit:m")
     parser.add_argument("--intrinsic", nargs="+", type=float, help="camera intrinsic parameters fx,fy,cx,cy")
-    parser.add_argument("--Rwc", nargs="+", type=float, help="rotation matrix from ccs to ocs")
-    parser.add_argument("--Twc", nargs="+", type=float, help="translation vector from ccs to ocs")
+    parser.add_argument("--Rcw", nargs="+", type=float, help="rotation matrix from world to camera")
+    parser.add_argument("--tcw", nargs="+", type=float, help="translation vector from world to camera")
 
     return parser
 
@@ -63,10 +63,10 @@ def main():
         cfg["world_y_start"] = args.world_y_start
     if args.intrinsic is not None:
         cfg["intrinsic"] = args.intrinsic
-    if args.Rwc is not None:
-        cfg["Rwc"] = args.Rwc
-    if args.Twc is not None:
-        cfg["Twc"] = args.Twc
+    if args.Rcw is not None:
+        cfg["Rcw"] = args.Rcw
+    if args.tcw is not None:
+        cfg["tcw"] = args.tcw
     print(f"[main] {args.config} >> \n{cfg}")
 
     ipm = IPM(cfg)
